@@ -8,7 +8,7 @@ function findPairsDivisibleBy17() {
             }
         }
     }
-    console.log(`Tổng cộng: ${count} cặp`)
+    console.log(`Tổng cộng: ${count} cặp`);
 }
 
 //Test
