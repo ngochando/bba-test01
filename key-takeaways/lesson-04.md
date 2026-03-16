@@ -573,3 +573,343 @@ nums.forEach(item => {
 
 console.log(sum) // output: 15
 ```
+
+### JavaScript -Array Ultils
+
+#### map()
+> Tạo mảng mới bằng cách áp dụng một hàm lên từng phần tử của mảng gốc => trả về mảng mới có cùng độ dài
+
+Ví dụ: 
+```
+//Ví dụ 1: nhân 2 lên cho tất cả các phần tử có trong mảng
+const arr = [1, 2, 3, 4, 5];
+
+const newArr = arr.map(a => a * 2); //lamda function -> học sau
+
+console.log(arr); //[1, 2, 3, 4, 5] - mảng gốc được giữa nguyên
+console.log(newArr); //[2, 4, 6, 8, 10]
+
+//Ví dụ 2:
+const students = ['An', 'Bình', 'Cường'];
+const studentList = students.map((name, index) => ({
+    id: index + 1,
+    name: name,
+    code: `SV00${index + 1}`
+}))
+
+console.log(studentList);
+```
+
+#### filter()
+> Tạo ra mảng mới chỉ chứa các phần tử thoả mãn điều kiện bên trong hàm callback. Trả về mảng đã được lọc
+
+Ví dụ:
+```
+const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const evenNums = nums.filter(num => num % 2 === 0)
+
+console.log(evenNums); // [2, 4, 6, 8, 10]
+console.log(num); //[1, 2, 3, 4, 5, 6, 7, 8, 9, 10] -> mảng gốc giữ nguyên không thay đổi
+```
+
+#### find()
+
+> Tìm và trả về phần tử đầu tiên trong mảng thoả điều kiện. Trả về undefined nếu không tìm thấy
+
+Ví dụ:
+```
+//Ví dụ 1
+const nums = [1, 5, 3, 8, 2, 10, 7];
+
+//Tìm số chẵn đầu tiên
+const firstEven = nums.find(num => num % 2 === 0) //output: 8
+
+//Tìm số lớn hơn 6
+const greaterThanSix = nums.find(num => num > 6) // output 8 -> dừng lại ngay khi tìm thấy
+
+//Không tìm thấy
+const negative = nums.find(num => num < 0); // output: undefined
+
+//--------------------------------------------------------------------
+
+//Ví dụ 2:
+const users = [
+    {id: 101, name: 'An', role: 'admin', active: true},
+    {id: 102, name: 'Bình', role: 'user', active: false},
+    {id: 103, name: 'Cường', role: 'user', active: true},
+    {id: 104, name: 'Dũng', role: 'admin', active: true}
+];
+
+//Tìm user theo id
+const userID = 103;
+const user = users.find(user => user.id === userID);
+console.log(user); //{ id: 103, name: 'Cường', role: 'user', active: true }
+
+//Tìm admin đầu tiên
+const userRole = "admin";
+const firstAdmin = users.find(user => user.role === userRole);
+console.log(firstAdmin); // { id: 101, name: 'An', role: 'admin', active: true }
+
+//Tìm user không active
+const inactiveUser = users.find(user => user.active === false);
+console.log(inactiveUser); // {id: 102, name: 'Bình', role: 'user', active: false}
+```
+
+#### reduce()
+> Duyệt qua mảng và **tích luỹ** các phần tử thành 1 giá trị duy nhất
+(số, chuỗi, object, ...) dựa trên hàm callback (còn có thể dễ hiểu gộp tất cả phần tử của mảng thành 1 giá trị)
+
+- Syntax:
+```
+array.reduce((accumulator, currentValue) => {
+    return newValue;
+}, initialValue)
+```
+- ```accumulator```: giá trị đang được tích luỹ
+- ```currentValue```: phần tử hiện tại của array
+- ```initialValue```: giá trị ban đầu
+
+**Mô hình tư duy đơn giản, dễ hiểu**
+
+Khi dùng reduce hãy nghĩ:
+
+- ```accumulator = kết quả tạm thời```
+
+Sau mỗi vòng lặp:
+
+- ```kết quả tạm thời (accumulator) = xử lý (kết quả tạm thời(accumulator), phần tử hiện tại (current))```
+
+Ví dụ:
+```
+const arr = [1, 2, 3, 4, 5];
+const sum = arr.reduce((accumulator, current) => {
+    console.log(`Accumulator: ${accumulator} - Current: ${current}`)
+    return accumulator + current //tính toán ra giá trị tích luỹ của vòng tiếp theo
+}, 0)
+
+// Accumulator: 0 - Current: 1 -> return 1
+// Accumulator: 1 - Current: 2 -> return 3
+// Accumulator: 3 - Current: 3 -> return 6
+// Accumulator: 6 - Current: 4 -> return 10
+// Accumulator: 10 - Current: 5 -> return 15
+
+console.log(sum)
+```
+
+**So sánh với for loop:** ```reduce``` là cách viết gọn của loop tích lũy.
+```
+const nums = [1, 2, 3, 4, 5];
+
+let sum1 = 0;
+for(let i = 0; i < nums; i++){
+    sum1 += nums[i]
+}
+console.log(sum1); // 15
+
+const sum2 = nums.reduce((accumulator, current) => {
+    return accumulator + current
+}, 0);
+console.log(sum2); //15
+
+```
+
+Ví dụ:
+
+```
+const cart = [
+    { product: 'Laptop', price: 20000000, quantity: 1 },
+    { product: 'Mouse', price: 300000, quantity: 2 },
+    { product: 'Keyboard', price: 800000, quantity: 1 },
+    { product: 'Monitor', price: 5000000, quantity: 2 }
+]
+
+//-------------------------------------------------------------
+
+//Tính tổng tiền giỏ hàng
+
+//Dùng for loop
+let sumCart1 = 0;
+for (let i = 0; i < cart.length; i++){
+    sumCart1 += cart[i].price * cart[i].quantity;
+}
+console.log(sumCart1); //31400000
+
+//Dùng reduce()
+const sumCart2 = cart.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+}, 0)
+console.log(sumCart2); //31400000
+
+//-------------------------------------------------------------
+
+//Tính tổng số lượng sản phẩm
+
+//Dùng for loop
+let totalItem1 = 0;
+for(let i = 0; i < cart.length; i++){
+    totalItem1 += cart[i].quantity;
+}
+
+console.log(totalItem1);
+
+//Dùng reduce()
+const totalItem2 = cart.reduce((count, item) => {
+    return count + item.quantity;
+}, 0);
+```
+
+#### some()
+> Kiểm tra xem **có ít nhất một phần tử** trong mảng **thoả điều kiện** hay không. Trả về **true/false**. Dừng ngay khi tìm thấy phần tử thoả điều kiện.
+
+Ví dụ:
+```
+const numbers = [1, 3, 5, 7, 8, 9];
+
+//Kiểm tra xem có số chẵn hay không?
+const hasEven = numbers.some(num => num % 2 === 0)
+console.log(hasEven); // true
+
+//Kiểm tra có số > 10 hay không?
+const greaterThanTen = numbers.some(num => num > 10);
+console.log(greaterThanTen); // false
+```
+
+```
+const user = {
+    name: "Nguyen Van A",
+    roles: [
+        "user",
+        "editor"
+    ]
+};
+
+const adminRoles = [
+    "admin",
+    "superadmmin"
+]
+
+const editorRoles = [
+    "editor",
+    "admin"
+]
+
+//Kiểm tra user có quyền editor hay không?
+const canEdit = user.roles.some(role => editorRoles.includes(role));
+console.log(canEdit); //true
+
+//Kiểm tra user có phải là admin hay không
+const isAdmin = user.roles.some(role => adminRoles.includes(role));
+console.log(isAdmin); //false
+
+//Hàm kiểm tra quyền tổng quát
+function hasPermission(userRoles, requiredRoles) {
+    return userRoles.some(role => requiredRoles.includes(role));
+}
+
+console.log(hasPermission(user.roles, editorRoles)); //true
+console.log(hasPermission(user.roles, adminRoles)); //false
+```
+
+#### every()
+> Kiểm tra xem **tất cả phần tử trong mảng** có thoả mãn điều kiện hay không. Trả về **true/false**. Dừng ngay khi gặp false.
+
+Ví dụ:
+```
+const numbers = [2, 4, 0, 8, 10];
+
+//Kiểm tra tất cả là số chẵn
+const allEven = numbers.every(num => num % 2 === 0);
+
+console.log(allEven);
+
+//Kiểm tra tất cả lớn hơn 0
+const greaterThanZero = numbers.every(num => num > 0);
+
+console.log(greaterThanZero);
+```
+ 
+```
+const orderItems = [
+    { product: "iPhone 15", quantity: 1, inStock: 5, price: 25000000},
+    { product: "AirPods", quantity: 2, inStock: 10, price: 4000000},
+    { product: "Case", quantity: 1, inStock: 20, price: 500000}
+];
+
+//Tất cả sản phẩm còn đủ hàng
+const allAvailable = orderItems.every(item => item.inStock >= item.quantity);
+console.log(allAvailable);
+
+//Tất cả sản phẩm có giá hợp lệ
+const allValidPrices = orderItems.every(item => item.price > 0);
+console.log(allValidPrices);
+
+//Kiểm tra giới hạn số lượng (max 10 mỗi sản phẩm)
+const withinQuantityLimit = orderItems.every(item => item.quantity <= 10);
+console.log(withinQuantityLimit); 
+```
+
+#### sort()
+> Sắp xếp các phần tử trong mảng theo thứ tự mặc định là theo thứ tự tăng dần (alphabet). Lưu ý: nó sẽ làm thay đổi mảng gốc
+
+Ví dụ:
+```
+//Sort chuỗi
+const names = ["Han", "Phong", "Nhung", "An", "Tuan"];
+names.sort();
+console.log(names); //[ 'An', 'Han', 'Nhung', 'Phong', 'Tuan' ]
+
+//------------------------------------------------------------------
+
+//Sort số
+const numbers = [10, 5, 40, 25, 10000, 1];
+numbers.sort(); 
+console.log(numbers); // [ 1, 10, 10000, 25, 40, 5 ]
+/*
+Bug:
+Do sort() mặc định sắp xếp theo chuỗi (string), JS so sánh từng ký tự từ trái sang phải. Không đúng theo thứ tự số học.
+Các số bị conver thành:
+    10     → "10"
+    5      → "5"
+    40     → "40"
+    25     → "25"
+    10000  → "10000"
+    1      → "1"
+*/
+
+//Cách đúng -> dùng Compare function
+numbers.sort((a, b) => a - b); //tăng dần
+/*
+a - b = c
+nếu c < 0 -> a đứng trước b
+nếu c > 0 -> b đứng trước a
+nếu c = 0 -> giữ nguyên
+
+Khi sort() chạy, nó liên tục hỏi một câu:
+a và b → ai đứng trước?
+Bạn phải trả lời câu hỏi này bằng một con số.
+*/
+console.log(numbers);
+
+numbers.sort((a, b) => b - a); // giảm dần
+console.log(numbers);
+
+//-----------------------------------------------------------------
+
+//Compare function detail:
+const arr = [3, 1, 2];
+
+arr.sort((a, b) => {
+    console.log(`Compare ${a} với ${b}`);
+    if (a < b) return -1; // a trước b
+    if (a > b) return 1; // b trước a
+    return 0; // bằng nhau
+});
+
+// Compare 3 vói 1
+// Compare 3 vói 2
+// Compare 1 vói 2 console.log(arr); // [1, 2, 3]
+// Viết gọn với phép trừ (cho sö)
+
+arr.sort((a, b) => a - b); // tương đương với code trên
+```
+
